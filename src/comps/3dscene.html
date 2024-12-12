@@ -1,165 +1,189 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Three.js GLB Model</title>
-    <style>
-        body { margin: 0; }
-        canvas { display: block; }
-    </style>
-</head>
-<body>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    <script>
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/RGBELoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ alpha: true });
+    
+    renderer.setSize(window.innerWidth, window.innerHeight);
 
-        // Background color
-        scene.background = new THREE.Color(0xffffff);
+    // document.body.appendChild(renderer.domElement);
 
-        // Ambient light
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-        scene.add(ambientLight);
+    //append model to a div with class .3dscene
+    document.querySelector('.scene3d').appendChild(renderer.domElement);
 
-        // Add a light source
-        const light = new THREE.DirectionalLight(0xffffff, 1);
-        light.position.set(1, 1, 1).normalize();
-        scene.add(light);
+    // // Background color
+    // scene.background = new THREE.Color(0xffffff);
 
-        // Load multiple GLB models
-        const models = ['/assets/models/model1.glb',  '/assets/models/model3.glb'];
-        let currentModelIndex = 0;
-        let currentModel;
+    // Ambient light
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
 
-        const loader = new THREE.GLTFLoader();
-        function loadModel(index) {
-            if (currentModel) {
-                scaleDownModel(currentModel, () => {
-                    scene.remove(currentModel);
-                    loadNewModel(index);
-                });
-            } else {
-                loadNewModel(index);
-            }
-        }
+    // // Add a light source
+    // const light = new THREE.DirectionalLight(0xffffff, 1);
+    // light.position.set(1, 1, 1).normalize();
+    // scene.add(light);
 
-        function loadNewModel(index) {
-            loader.load(models[index], function (gltf) {
-                currentModel = gltf.scene;
-                scene.add(currentModel);
-                scaleUpModel(currentModel);
-            }, undefined, function (error) {
-                console.error(error);
-            });
-        }
+    // Add HDR background
+    const pmremGenerator = new THREE.PMREMGenerator(renderer);
+    pmremGenerator.compileEquirectangularShader();
+    new THREE.RGBELoader()
+        .setDataType(THREE.UnsignedByteType)
+        .setPath('{{domain_link}}/assets/models/')
+        .load('unfinished_office_1k.hdr', function (texture) {
+            const envMap = pmremGenerator.fromEquirectangular(texture).texture;
+            scene.environment = envMap;
+            //set background color #000
+            scene.background = null;
 
-        function scaleDownModel(model, onComplete) {
-            let scale = 1;
-            const scaleDown = () => {
-                scale -= 0.05;
-                if (scale <= 0) {
-                    scale = 0;
-                    onComplete();
-                } else {
-                    model.scale.set(scale, scale, scale);
-                    requestAnimationFrame(scaleDown);
-                }
-            };
-            scaleDown();
-        }
 
-        function scaleUpModel(model) {
-            let scale = 0;
-            model.scale.set(scale, scale, scale);
-            const scaleUp = () => {
-                scale += 0.05;
-                if (scale >= 1) {
-                    scale = 1;
-                } else {
-                    model.scale.set(scale, scale, scale);
-                    requestAnimationFrame(scaleUp);
-                }
-            };
-            scaleUp();
-        }
+            //render the scene with the HDR environment map
+            renderer.toneMapping = THREE.LinearToneMapping;
+                renderer.toneMappingExposure = 1;
 
-        // Initial model load
-        loadModel(currentModelIndex);
-
-        // Set camera position
-        camera.position.z = 5;
-
-        // Controls
-        const controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.25;
-        controls.enableZoom = true;
-
-        // Handle window resize
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+            texture.dispose();
+            pmremGenerator.dispose();
         });
 
-        // Swipe detection
-let touchStartX = 0;
-let touchEndX = 0;
+    // Load multiple GLB models
+    const models = ['{{domain_link}}/assets/models/car-2.glb'];
+    let currentModelIndex = 0;
+    let currentModel;
 
-function handleGesture() {
-    if (touchEndX < touchStartX) {
-        currentModelIndex = (currentModelIndex + 1) % models.length;
-        loadModel(currentModelIndex);
-    }
-    if (touchEndX > touchStartX) {
-        currentModelIndex = (currentModelIndex - 1 + models.length) % models.length;
-        loadModel(currentModelIndex);
-    }
-}
-
-document.addEventListener('touchstart', e => {
-    touchStartX = e.changedTouches[0].screenX;
-});
-
-document.addEventListener('touchend', e => {
-    touchEndX = e.changedTouches[0].screenX;
-    handleGesture();
-});
-
-// Mouse swipe detection
-document.addEventListener('mousedown', e => {
-    touchStartX = e.screenX;
-});
-
-document.addEventListener('mouseup', e => {
-    touchEndX = e.screenX;
-    handleGesture();
-});
-
-// Animation loop
-let rotationAngle = 0;
-let rotationDirection = 1;
-
-function animate() {
-    requestAnimationFrame(animate);
-    if (currentModel) {
-        rotationAngle += 0.01 * rotationDirection;
-        currentModel.rotation.y = rotationAngle;
-
-        if (rotationAngle > 0.5 || rotationAngle < -0.5) {
-            rotationDirection *= -1;
+    const loader = new THREE.GLTFLoader();
+    function loadModel(index) {
+        if (currentModel) {
+            scaleDownModel(currentModel, () => {
+                scene.remove(currentModel);
+                loadNewModel(index);
+            });
+        } else {
+            loadNewModel(index);
         }
     }
-    controls.update();
-    renderer.render(scene, camera);
-}
-animate();
-    </script>
-</body>
-</html>
+
+    function loadNewModel(index) {
+        loader.load(models[index], function (gltf) {
+            currentModel = gltf.scene;
+            scene.add(currentModel);
+            scaleUpModel(currentModel);
+        }, undefined, function (error) {
+            console.error(error);
+        });
+    }
+
+    // function scaleDownModel(model, onComplete) {
+    //     let scale = 1;
+    //     const scaleDown = () => {
+    //         scale -= 0.05;
+    //         if (scale <= 0) {
+    //             scale = 0;
+    //             onComplete();
+    //         } else {
+    //             model.scale.set(scale, scale, scale);
+    //             requestAnimationFrame(scaleDown);
+    //         }
+    //     };
+    //     scaleDown();
+    // }
+
+    function scaleUpModel(model) {
+        let scale = 0;
+        model.scale.set(scale, scale, scale);
+        const scaleUp = () => {
+            scale += 0.05;
+            if (scale >= 1) {
+                scale = 1;
+            } else {
+                model.scale.set(scale, scale, scale);
+                requestAnimationFrame(scaleUp);
+            }
+        };
+        scaleUp();
+    }
+
+    // Initial model load
+    loadModel(currentModelIndex);
+
+    // Set camera position
+    camera.position.z = 5;
+    camera.position.y = 3;
+
+    // Controls
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.25;
+    controls.enableZoom = true;
+    //MAX distance
+    controls.maxDistance = 5;
+    //MIN distance
+    controls.minDistance = 3;
+    //MAX angle
+    controls.maxPolarAngle = Math.PI / 2;
+    //MIN angle
+    controls.minPolarAngle = Math.PI / 4;
+
+    // Handle window resize
+    function onWindowResize() {
+        const container = document.querySelector('.scene3d');
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        render();
+    }
+
+    // Swipe detection
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    // function handleGesture() {
+    //     if (touchEndX < touchStartX) {
+    //         currentModelIndex = (currentModelIndex + 1) % models.length;
+    //         loadModel(currentModelIndex);
+    //     }
+    //     if (touchEndX > touchStartX) {
+    //         currentModelIndex = (currentModelIndex - 1 + models.length) % models.length;
+    //         loadModel(currentModelIndex);
+    //     }
+    // }
+
+    // document.addEventListener('touchstart', e => {
+    //     touchStartX = e.changedTouches[0].screenX;
+    // });
+
+    // document.addEventListener('touchend', e => {
+    //     touchEndX = e.changedTouches[0].screenX;
+    //     handleGesture();
+    // });
+
+    // Mouse swipe detection
+    // document.addEventListener('mousedown', e => {
+    //     touchStartX = e.screenX;
+    // });
+
+    // document.addEventListener('mouseup', e => {
+    //     touchEndX = e.screenX;
+    //     handleGesture();
+    // });
+
+    // Animation loop
+    let rotationAngle = 0;
+    let rotationDirection = 1;
+
+    function animate() {
+        requestAnimationFrame(animate);
+        if (currentModel) {
+            // camera.position.x = 5 * Math.sin(rotationAngle);
+            // camera.position.z = 5 * Math.cos(rotationAngle);
+            // camera.lookAt(currentModel.position);
+            // rotationAngle += 0.005;
+
+            currentModel.rotation.y += 0.005;
+        }
+        controls.update();
+        renderer.render(scene, camera);
+    }
+    animate();
+</script>
