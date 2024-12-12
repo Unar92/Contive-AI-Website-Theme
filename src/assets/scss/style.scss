@@ -69,10 +69,10 @@ nav {
     display: none;
 }
 
-.auth-links {
-    display: flex;
-    align-items: center;
-}
+// .auth-links {
+//     display: flex;
+//     align-items: center;
+// }
 
 .login {
     color: #ccc;
@@ -90,7 +90,6 @@ nav {
     color: #f9f7f2;
     font-size: 15px;
     font-weight: 600;
-    line-height: 120%;
     transition: .2s;
     outline: none;
     background: #ff8a00;
@@ -101,7 +100,7 @@ nav {
 
     span {
         transition: .2s;
-        transform: translate(-24px, 0%);
+        transform: translate(-15px, 0%);
     }
 
   &::before {
