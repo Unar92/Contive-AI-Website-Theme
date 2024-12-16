@@ -87,13 +87,13 @@ nav {
     padding: 0 24px;
     height: 50px;
     border-radius: 40px;
-    color: #f9f7f2;
+    color: #fff;
     font-size: 15px;
     font-weight: 600;
     transition: .2s;
     outline: none;
-    background: #ff8a00;
-    border-color: #ff8a00;
+    background: #0aa0a5;
+    border-color: #1fccd2;
     overflow: hidden;
     position: relative;
     gap: 10px;
@@ -254,6 +254,14 @@ h1 {
         left: 0;
         z-index: 0;
         overflow: hidden;
+
+        canvas
+        {
+            @media screen and (min-width: 767px) {
+               transform: translateX(250px);
+                
+            }
+        }
 
     
     }
