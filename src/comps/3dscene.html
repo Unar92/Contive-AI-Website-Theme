@@ -9,24 +9,8 @@
     
     renderer.setSize(window.innerWidth, window.innerHeight);
 
-    // document.body.appendChild(renderer.domElement);
-
-    //append model to a div with class .3dscene
     document.querySelector('.scene3d').appendChild(renderer.domElement);
 
-    // // Background color
-    // scene.background = new THREE.Color(0xffffff);
-
-    // Ambient light
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-    scene.add(ambientLight);
-
-    // // Add a light source
-    // const light = new THREE.DirectionalLight(0xffffff, 1);
-    // light.position.set(1, 1, 1).normalize();
-    // scene.add(light);
-
-    // Add HDR background
     const pmremGenerator = new THREE.PMREMGenerator(renderer);
     pmremGenerator.compileEquirectangularShader();
     new THREE.RGBELoader()
@@ -35,20 +19,16 @@
         .load('unfinished_office_1k.hdr', function (texture) {
             const envMap = pmremGenerator.fromEquirectangular(texture).texture;
             scene.environment = envMap;
-            //set background color #000
             scene.background = null;
 
-
-            //render the scene with the HDR environment map
             renderer.toneMapping = THREE.LinearToneMapping;
-                renderer.toneMappingExposure = 1;
+            renderer.toneMappingExposure = 1;
 
             texture.dispose();
             pmremGenerator.dispose();
         });
 
-    // Load multiple GLB models
-    const models = ['{{domain_link}}/assets/models/car-2.glb'];
+    const models = ['{{domain_link}}/assets/models/car-2.glb', '{{domain_link}}/assets/models/model1.glb', '{{domain_link}}/assets/models/model3.glb'];
     let currentModelIndex = 0;
     let currentModel;
 
@@ -69,25 +49,39 @@
             currentModel = gltf.scene;
             scene.add(currentModel);
             scaleUpModel(currentModel);
+            getObjectNames(currentModel);
         }, undefined, function (error) {
             console.error(error);
         });
     }
 
-    // function scaleDownModel(model, onComplete) {
-    //     let scale = 1;
-    //     const scaleDown = () => {
-    //         scale -= 0.05;
-    //         if (scale <= 0) {
-    //             scale = 0;
-    //             onComplete();
-    //         } else {
-    //             model.scale.set(scale, scale, scale);
-    //             requestAnimationFrame(scaleDown);
-    //         }
-    //     };
-    //     scaleDown();
-    // }
+    function getObjectNames(model) {
+        model.traverse(child => {
+            console.log(child.name);
+        });
+
+        model.traverse(child => {
+            if (child.name === 'shadow') {
+                child.visible = false;
+                console.log('shadow hidden');  
+            }
+        });
+    }
+
+    function scaleDownModel(model, onComplete) {
+        let scale = 1;
+        const scaleDown = () => {
+            scale -= 0.05;
+            if (scale <= 0) {
+                scale = 0;
+                onComplete();
+            } else {
+                model.scale.set(scale, scale, scale);
+                requestAnimationFrame(scaleDown);
+            }
+        };
+        scaleDown();
+    }
 
     function scaleUpModel(model) {
         let scale = 0;
@@ -104,28 +98,20 @@
         scaleUp();
     }
 
-    // Initial model load
     loadModel(currentModelIndex);
 
-    // Set camera position
     camera.position.z = 5;
     camera.position.y = 3;
 
-    // Controls
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.25;
     controls.enableZoom = true;
-    //MAX distance
     controls.maxDistance = 5;
-    //MIN distance
     controls.minDistance = 3;
-    //MAX angle
     controls.maxPolarAngle = Math.PI / 2;
-    //MIN angle
     controls.minPolarAngle = Math.PI / 4;
 
-    // Handle window resize
     function onWindowResize() {
         const container = document.querySelector('.scene3d');
         camera.aspect = container.clientWidth / container.clientHeight;
@@ -134,56 +120,46 @@
         render();
     }
 
-    // Swipe detection
     let touchStartX = 0;
     let touchEndX = 0;
 
-    // function handleGesture() {
-    //     if (touchEndX < touchStartX) {
-    //         currentModelIndex = (currentModelIndex + 1) % models.length;
-    //         loadModel(currentModelIndex);
-    //     }
-    //     if (touchEndX > touchStartX) {
-    //         currentModelIndex = (currentModelIndex - 1 + models.length) % models.length;
-    //         loadModel(currentModelIndex);
-    //     }
-    // }
-
-    // document.addEventListener('touchstart', e => {
-    //     touchStartX = e.changedTouches[0].screenX;
-    // });
-
-    // document.addEventListener('touchend', e => {
-    //     touchEndX = e.changedTouches[0].screenX;
-    //     handleGesture();
-    // });
-
-    // Mouse swipe detection
-    // document.addEventListener('mousedown', e => {
-    //     touchStartX = e.screenX;
-    // });
-
-    // document.addEventListener('mouseup', e => {
-    //     touchEndX = e.screenX;
-    //     handleGesture();
-    // });
-
-    // Animation loop
     let rotationAngle = 0;
     let rotationDirection = 1;
 
+    let isAnimating = true;
+    let lastTime = performance.now();
+
     function animate() {
+        if (!isAnimating) return;
+        const now = performance.now();
+        const delta = now - lastTime;
+        lastTime = now;
+
         requestAnimationFrame(animate);
         if (currentModel) {
-            // camera.position.x = 5 * Math.sin(rotationAngle);
-            // camera.position.z = 5 * Math.cos(rotationAngle);
-            // camera.lookAt(currentModel.position);
-            // rotationAngle += 0.005;
-
-            currentModel.rotation.y += 0.005;
+            currentModel.rotation.y += 0.005 * delta / 16.67; // Adjust rotation speed based on elapsed time
         }
         controls.update();
         renderer.render(scene, camera);
     }
     animate();
+
+    setInterval(() => {
+        if (isAnimating) {
+            currentModelIndex = (currentModelIndex + 1) % models.length;
+            loadModel(currentModelIndex);
+        }
+    }, 5000);
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            isAnimating = false;
+        } else {
+            isAnimating = true;
+            lastTime = performance.now(); // Reset lastTime to avoid jump in animation
+            animate();
+        }
+    });
+
+    window.addEventListener('resize', onWindowResize, false);
 </script>

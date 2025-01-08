@@ -5,7 +5,7 @@
 @import 'plugins/intlTelInput.css';
 @import 'footer.scss';
 // main url
-// $domain-link: '';
+$domain-link: '';
 :root {
     --vh: 1vh;
 }
@@ -33,6 +33,10 @@ html {
 body {
     font-family: Arial, sans-serif;
     background: linear-gradient(to bottom right, #1a1a1a, #2a2a2a);
+    background-image: url($domain-link + '/assets/images/hero-bg.png');
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
     color: white;
     min-height: 100vh;
     overflow-x: hidden;
@@ -358,7 +362,7 @@ h1 {
     //responsive code for hero content
     .hero-content {
         flex-direction: column;
-        height: 100vh;
+        height: 100%;
     }
 
     .hero-text {
