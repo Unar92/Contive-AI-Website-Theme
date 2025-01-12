@@ -49,7 +49,7 @@
             currentModel = gltf.scene;
             scene.add(currentModel);
             scaleUpModel(currentModel);
-            getObjectNames(currentModel);
+            // getObjectNames(currentModel);
         }, undefined, function (error) {
             console.error(error);
         });
@@ -106,7 +106,7 @@
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.25;
-    controls.enableZoom = true;
+    controls.enableZoom = false; // Disable zoom
     controls.maxDistance = 5;
     controls.minDistance = 3;
     controls.maxPolarAngle = Math.PI / 2;
@@ -117,7 +117,7 @@
         camera.aspect = container.clientWidth / container.clientHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(container.clientWidth, container.clientHeight);
-        render();
+        // render();
     }
 
     let touchStartX = 0;

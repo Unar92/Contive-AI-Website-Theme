@@ -3,6 +3,7 @@
 
 // plugins
 @import 'plugins/intlTelInput.css';
+@import 'services-carousel.scss';
 @import 'footer.scss';
 // main url
 $domain-link: '';
@@ -37,14 +38,15 @@ body {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
+    background-attachment: fixed;
     color: white;
     min-height: 100vh;
-    overflow-x: hidden;
+    // overflow: hidden;
 }
 
 
 header {
-    padding: 1rem;
+    padding: 1rem 0px;
     z-index: 3;
     position: relative;
 }
@@ -161,16 +163,21 @@ main {
 .hero-text {
     text-align: center;
     margin-bottom: 2rem;
+
+    .top-text-wrap {
+        border-left: 1px solid #fff;
+        padding-left: 15px;
+    }
 }
 
 .subtitle {
-    color: #ccc;
-    margin-bottom: 0.5rem;
+    color: #fff;
+    margin-bottom: 1.5rem;
 }
 
 .subtext {
-    color: #999;
-    margin-bottom: 1rem;
+    color: #fff;
+    margin-bottom: 0rem;
 }
 
 h1 {
@@ -197,8 +204,12 @@ h1 {
 
 // @media (min-width: 768px) {
     nav {
-        padding: 1rem 2rem;
+        padding: 1rem 4rem;
         z-index: 1;
+        @media screen and (max-width: 767px) {
+            padding:1rem 1rem;
+            
+        }
     }
 
     .nav-links {
@@ -216,7 +227,12 @@ h1 {
     }
 
     main {
-        padding: 4rem 2rem;
+        padding: 4rem 4rem;
+
+        @media screen and (max-width: 767px) {
+            padding: 2rem 1rem;
+            
+        }
     }
 
     .hero-content {
@@ -437,7 +453,7 @@ h1 {
 
 .c-social-media {
     position: absolute;
-    top: 50%;
+    top: 50vh;
     right: 4.167vw;
     transform: translateY(-50%);
 
@@ -479,4 +495,37 @@ h1 {
       }
     }
 
+}
+
+
+.bg-video
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+
+    //add overlay
+    &::before
+    {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 1;
+    }
+
+    video
+    {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 }
