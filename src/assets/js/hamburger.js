@@ -144,3 +144,23 @@ closeTrigger.on('click', function(){
                 tlClose.restart();
             }
 });
+
+
+//onclick .menu-trigger add class .active
+$('.menu-trigger').click(function(){
+    //opacity of menu to 1 using gsap
+    TweenMax.to(".mobile-menu", 1, {opacity: 1, display: 'block', ease: Power2.easeInOut});
+    TweenMax.to(".inner-container", 1, {opacity: 1, ease: Power2.easeInOut});
+    //add class .active to .menu-trigger
+    $('.mobile-menu').toggleClass('active');
+});
+
+
+//onclick .menu-trigger add class .active
+$('.close-trigger').click(function(){
+   
+    TweenMax.to(".inner-container", 1, {opacity: 0, ease: Power2.easeInOut});
+    setTimeout(function() {
+      $('.mobile-menu').toggleClass('active');
+    }, 500);
+});
