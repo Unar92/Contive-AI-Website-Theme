@@ -5,6 +5,7 @@
 @import 'plugins/intlTelInput.css';
 @import 'services-carousel.scss';
 @import 'hamburger.scss';
+@import 'marquee.scss';
 @import 'footer.scss';
 // main url
 $domain-link: '';
@@ -42,7 +43,7 @@ body {
     background-attachment: fixed;
     color: white;
     min-height: 100vh;
-    // overflow: hidden;
+    overflow-x: hidden;
 }
 
 
@@ -229,6 +230,7 @@ h1 {
 
     main {
         padding: 4rem 4rem;
+        height: 70vh;
 
         @media screen and (max-width: 767px) {
             padding: 2rem 1rem;
@@ -240,7 +242,7 @@ h1 {
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
-        height: 50vh;
+        height: 70vh;
       
 
 
@@ -519,14 +521,34 @@ h1 {
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.8);
+        background: rgba(0, 0, 0, 0.7);
         z-index: 1;
     }
 
     video
     {
         width: 100%;
-        height: 100%;
+        height: 120vh;
         object-fit: cover;
+    }
+}
+
+
+.is--desktop
+{
+    display: none;
+
+    @media screen and (min-width: 768px) {
+        display: block;
+    }
+}
+
+
+.is--mobile
+{
+    display: block;
+
+    @media screen and (min-width: 768px) {
+        display: none;
     }
 }
