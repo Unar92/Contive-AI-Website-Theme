@@ -1,0 +1,307 @@
+.c-header {
+    // display: none;
+}
+.c-newspress {
+    padding-top: 7.4vh;
+    padding-bottom: 11.11vh;
+    color: $Neutral-Black;
+    background-color: #fff;
+    
+
+    .grid {
+      
+        .c-desc-title {
+            font-family: 'Alexandria', sans-serif;
+            font-size: clamp(24px, 1.666666666666667vw, 36px);
+            font-weight: bold;
+            line-height: 1em;
+            display: flex;
+            align-items: center;
+            margin: 0;
+        //       /* rtl:ignore */
+        // direction: ltr;
+
+            .c-dark-eclipse {
+                margin-right: 1rem;
+
+                // html[dir="rtl"] & {
+                //     margin-left: 1rem;
+                // }
+            }
+
+            @media all and (max-width: 1200px) {
+                font-size: clamp(16px, 6.153vw, 32px);
+                line-height: 1.2em;
+                font-weight: 500;
+            }
+        }
+
+        .c-heading {
+            font-family: 'Alexandria', sans-serif;
+            font-size: clamp(24px, 2.916666666666667vw, 80px );
+            font-weight: 300;
+            line-height: 1.21em;
+            margin-top: 7.4vh;
+            margin-bottom: 7.4vh;
+            text-transform: uppercase;
+        //       /* rtl:ignore */
+        // direction: ltr;
+
+            @media all and (max-width: 1200px) {
+                font-size: clamp(24px, 8.205128205128205vw, 48px);
+                line-height: 1.2190625em;
+                margin-top: 5.01vh;
+                margin-bottom: 10.02vh;
+            }
+        }
+
+        .news-posts {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+
+            .post {
+                width: 50%;
+                margin-bottom: 4.167vw;
+
+                @media all and (max-width: 1200px) {
+                    width: 100%;
+                    margin-bottom: 4.739336492890995vh;
+                }
+
+                .img-area {
+                    width: 100%;
+                    overflow: hidden;
+                    border-radius: 12px;
+                    margin-bottom: 2.222222222222222vh;
+
+                    @media all and (max-width: 1200px) {
+                        margin-bottom: 1.421800947867299vh;
+                    }
+
+                    img {
+                        width: 100%;
+                        // height: 100%;
+                        aspect-ratio: 16/9;
+                        object-fit: cover;
+                        border-radius: 12px;
+                    }
+                }
+
+                .news-post-title {
+                    font-family: 'Alexandria', sans-serif;
+                    font-size: clamp(32px, 2.5vw, 64px);
+                    font-weight: 300;
+                    line-height: 1.2em;
+                    text-align: left;
+                    margin: 0;
+                    margin-top: 1.48vh;
+                    margin-bottom: 1.48vh;
+
+                    html[dir="rtl"] & {
+                        direction: rtl;
+                        text-align: right;
+                    }
+
+                    a {
+                        text-decoration: none;
+                        color: $Neutral-Black;
+                    }
+
+                    @media all and (max-width: 1200px) {
+                        font-size: clamp(16px, 6.153846153846154vw, 32px);
+                        margin-top: 1.184834123222749vh;
+                        margin-bottom: 1.184834123222749vh;
+                    }
+                }
+
+                .post-meta-time {
+                    font-family: 'Alexandria', sans-serif;
+                    font-size: clamp(8px, 0.625vw, 16px);
+                    font-weight: 400;
+                    line-height: 1.05em;
+                    text-align: left;
+                    margin: 0;
+
+                    html[dir="rtl"] & {
+                        direction: rtl;
+                        text-align: right;
+                    }
+
+                    @media all and (max-width: 1200px) {
+                        font-size: clamp(8px, 3.076923076923077vw, 12px);
+                    }
+
+                    .c-small-darkeclipse {
+                        margin: 0 0.667rem;
+
+                        @media screen and (max-width: 1200px) {
+                            margin-left: 0;
+
+                            html[dir="rtl"] & {
+                                margin-right: 0;
+                            }
+                            
+                        }
+
+                       
+                    }
+                }
+
+                //every odd post has margin-right of 2rem
+                &:nth-child(odd) {
+                    padding-right: 2.0835vw;
+
+                    html[dir="rtl"] & {
+                        padding-left:  2.0835vw;
+                    }
+                }
+
+                &:nth-child(even) {
+                    
+                    padding-left: 2.0835vw;
+
+                    html[dir="rtl"] & {
+                        padding-right: 2.0835vw;
+                    }
+                }
+
+                @media all and (max-width: 1200px) {
+                    //every odd post has margin-right of 2rem
+                    &:nth-child(odd) {
+                        padding-right: 0;
+                    }
+
+                    &:nth-child(even) {
+                        padding-left: 0;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.c-small-darkeclipse {
+    transition: all ease-in-out 0.3s;
+    background-color: #1b1a19;
+    width: 8px;
+    height: 8px;
+    pointer-events: none;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    margin: auto 0;
+
+    @media all and (max-width: 1200px) {
+        width: 8px;
+        height: 8px;
+    }
+}
+.c-pagination
+{
+    display: flex;
+    justify-content: center;
+
+    .btns
+    {
+        width: 2.875rem;
+        height:  2.875rem;
+        background-color: $Neutral-Black;
+        border-radius: 999px;
+        border:1px solid $Neutral-Black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        // margin-right: 1rem;
+        cursor: pointer;
+        padding: 16px;
+
+        html[dir="rtl"] & {
+            //flip direction
+            transform: scaleX(-1);
+        }
+
+        //hover
+        &:hover
+        {
+            background-color: $Neutral-White;
+            color: $Neutral-Black;
+            transition: all 0.3s ease-in-out;
+
+           //image
+            img
+            {
+                filter: invert(1);
+                transition: all 0.3s ease-in-out;
+            }
+        }
+    }
+
+    .left-arrow
+    {
+        filter: invert(0);
+    }
+    
+
+    .pagination
+    {
+        list-style: none;
+        display: flex;
+        margin: 0 1.5rem;
+        padding: 0;
+        
+        li 
+        {
+            //circle with black background 
+            width: 2.875rem;
+            height:  2.875rem;
+            border-radius: 999px;
+            border:1px solid $Neutral-Black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+            
+            cursor: pointer;
+            padding: 16px;
+
+            //not last child
+            &:not(:last-child)
+            {
+                margin-right: 1rem;
+            }
+            
+            a {
+                color: $Neutral-Black;
+                text-decoration: none;
+                font-family: Alexandria;
+                font-size: .875rem;
+                font-weight: 300;
+                line-height: 22.4px;
+                letter-spacing: -0.02em;
+                text-align: left;
+
+            }
+
+            //hover
+            &:hover
+            {
+                background-color: $Neutral-Black;
+                color: $Neutral-White;
+                transition: all 0.3s ease-in-out;
+
+                a {
+                    color: $Neutral-White;
+                    transition: all 0.3s ease-in-out;
+
+                }
+
+            }
+
+            
+
+        }
+
+
+    }
+}
