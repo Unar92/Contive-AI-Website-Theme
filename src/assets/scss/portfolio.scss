@@ -1,7 +1,7 @@
 .c-header {
     // display: none;
 }
-.c-newspress {
+.c-projects {
     padding-top: 7.4vh;
     padding-bottom: 11.11vh;
     color: $Neutral-Black;
@@ -191,6 +191,7 @@
     display: inline-flex;
     align-items: center;
     margin: auto 0;
+    
 
     @media all and (max-width: 1200px) {
         width: 8px;

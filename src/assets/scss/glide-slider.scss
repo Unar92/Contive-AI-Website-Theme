@@ -10,7 +10,13 @@ $Neutral-Black : #111;;
     padding: 100px 0 100px 0;
     overflow: hidden;
     position: relative;
-    margin-top: 180px;
+    margin-top: 190px;
+    min-height: 100vh;
+    display: flex
+;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
     @media all and (max-width: 1200px) {
         // height: 56.998958vw;

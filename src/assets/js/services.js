@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 //onclick of .js-open-services toggle class active to .c-service-carousel
-document.querySelector('.js-open-services').addEventListener('click', () => {
+document.querySelector('.js-open-services')?.addEventListener('click', () => {
     document.querySelector('.c-service-carousel').classList.toggle('active');
     
     //make body overflowy scroll
