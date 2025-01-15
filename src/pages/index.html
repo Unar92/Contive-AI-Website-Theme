@@ -7,11 +7,11 @@
     <body class="is--home">
         <div class="bg-video">
             <video class="bg-video__content is--desktop" autoplay muted loop>
-                <source src="{{domain_link}}/assets/images/services/herovideo.mp4" type="video/mp4" />
+                <source src="{{domain_link}}/assets/videos/hero-bg.mp4" type="video/mp4" />
                 Your browser is not supported!
             </video>
             <video class="bg-video__content is--mobile" autoplay muted loop>
-                <source src="{{domain_link}}/assets/images/services/mob-vid.mp4" type="video/mp4" />
+                <source src="{{domain_link}}/assets/videos/mobile-bg.mp4" type="video/mp4" />
                 Your browser is not supported!
             </video>
 
@@ -26,9 +26,9 @@
            
 
         {% include "src/comps/glide.html" %}
+           
+            {% include "src/comps/projects.html" %}
             {% include "src/comps/marquee.html" %}
-
-            
         {% include "src/comps/footer.html" %}
     </body>
 </html>
