@@ -1,6 +1,6 @@
 $(document).ready(function () {
     // get root directory path
-    let domain_link = 'http://localhost:8000'; //window.location.origin;
+    let domain_link = '../'; //window.location.origin;
     var $slickElementjs = $('.js-glide-carousel');
     let glideItemsCount = $('.js-glide-carousel .glide-item').length; // indexing from 1
     let direction = document.documentElement.dir;
